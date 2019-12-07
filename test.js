@@ -1,5 +1,20 @@
-var func = require('./func')
+const d3 = require('d3');
+const csvFilePath='./MDXY.csv';
+const csv=require('csvtojson');
 
-var ary = [1,2,3,4,5,5,6]
+// read the data 
+csv()
+.fromFile(csvFilePath)
+.then((jsonObj)=>{
+    let aug = []
+    let jul = []
+    let sep = []
+    
+    // read csv as json
+    for (var i = 0; i < jsonObj.length; i++){
+        var obj = jsonObj[i];
+        obj.MDY.charAt(0) == "7"?jul.push(obj):obj.MDY.charAt(0) == "8"?aug.push(obj):sep.push(obj)
+    }
 
-console.log(func.findMinMax(ary));
+    // split the data into three groups by month
+})

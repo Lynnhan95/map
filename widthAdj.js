@@ -17,6 +17,6 @@ module.exports = function widthAdj (counterL,sliding,segment_num,gadget,factor){
 
     this.widthResult = func.weightedMean(this.densityMulti,countArea,sliding)
 
-    this.widthResult = this.widthResult.map(function(i){ i = i*factor;  if (i ==0) {i=0.1} ;return i;})
+    this.widthResult = this.widthResult.map(function(i){  if (i ==0) {i=0.1}  i = i*factor;return i;})
 
 }

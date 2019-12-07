@@ -5,10 +5,10 @@ const maxInscribed = require('./maxInscribed');
 const insideCounter = require("./insideCounter")
 const widthAdj = require("./widthAdj")
 
-module.exports= function drawPhoenix (data,svg,segment_num,color,sliding,factor){
-    
-    // Compute a concave-hull 
-    let outline = hull(data,20)
+module.exports= function drawPhoenix (data,svg,segment_num,color,sliding,weightFac,hullFac,className,maskId){
+
+    // Compute a concave-hull
+    let outline = hull(data,hullFac)
 
     // the segment number (Notice: if the concave-hull is complicated, set the number higher)
     // sliding window size
@@ -18,26 +18,31 @@ module.exports= function drawPhoenix (data,svg,segment_num,color,sliding,factor)
                   .x(function(d) { return d[0]})
                   .y(function(d) { return d[1]})
                   .curve(d3.curveCatmullRomClosed);
+    var group = svg.append('g').attr("class",className)
 
-    var p = svg.append("path")
+    // the para is changable for the shape of the curves
+    var p = group.append("path")
                       .style("fill","none")
-                      .style("stroke","blue")
+                      .style("stroke","none")
                       .style("stroke-width","1px")
-                      .attr("d",line0(outline));
+                      .attr("d",line0(outline,0.5));
 
-    // create clip mask 
-    var clipPolygon = svg.append("clipPath")
-          .attr("id", "polygon-clip")
+    // create clip mask
+    var clipPolygon = group.append("clipPath")
+          .attr("id", maskId)
           .append("path")
           .attr("d", line0(outline));
 
 
     var path = p.node();
     var divs = new maxInscribed(path,segment_num)
+
     var outlineDic = divs.newptsList
     var dataDic = data.map(item=>{return {x:item[0],y:item[1]}})
+
+
     var counterL = insideCounter(divs.dictAllmin,outlineDic,dataDic)
-    var result = new widthAdj(counterL,sliding,segment_num,divs.gadget,factor)
+    var result = new widthAdj(counterL,sliding,segment_num,divs.gadget,weightFac)
 
     var index =  0 ;
 
@@ -79,18 +84,14 @@ module.exports= function drawPhoenix (data,svg,segment_num,color,sliding,factor)
                             .curve(d3.curveCardinalClosed);
       var pathData = lineGenerator(arc_pts);
       var stroke_wid = result.widthResult[index]
-  
-      svg.append('path')
+
+      group.append('path')
               .style("stroke",color)
               .style("stroke-opacity", "1")
               .style("fill","black")
-              .style("opacity","1")
+              .style("opacity","0.3")
               .style("stroke-width",stroke_wid)
-              .attr("clip-path", "url(#polygon-clip)")
+              .attr("clip-path", "url(#"+maskId+")")
               .attr('d', pathData);
     }
 }
-
-
-
-

@@ -1,0 +1,27 @@
+
+#firstWindow{
+  background-color: black;
+  vertical-align: middle;
+  display: table;
+}
+
+p {
+  color: white;
+  text-align:center;
+  display: table-cell;
+  font-size: 20px;
+  margin-left: 50px;
+  margin-bottom: 50px;
+}
+
+#secondWindow{
+  background-color: black;
+  vertical-align: middle;
+  display: table;
+}
+
+#thirdWindow{
+  background-color: black;
+  vertical-align: middle;
+  display: table;
+}

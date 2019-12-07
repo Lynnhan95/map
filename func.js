@@ -38,11 +38,6 @@ function inside(point, vs) {
 
 
 function squareMatrixMultiply(A, B) {
-
-
-
-
-    
     var n = A.length;
     var C = [];
     for (var i = 0; i < n; i++) {
